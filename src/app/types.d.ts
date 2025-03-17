@@ -9,7 +9,7 @@ interface ResumeData {
 }
 
 interface PersonalDetailsData {
-  jobTitle: string;
+  position: string;
   name: string;
   surname: string;
   email: string;
@@ -26,7 +26,6 @@ interface EmploymentDataEntry {
   endDate?: string;
   city: string;
   employer: string;
-  jobTitle: string;
   position: string;
 }
 
