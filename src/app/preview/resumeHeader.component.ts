@@ -1,14 +1,14 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'resume-header',
   template: `
     @if(personalDetails){
-      <div class="header text-center">
+      <div class="text-center">
         <h1 class="uppercase">
           {{ personalDetails.name }} {{ personalDetails.surname }}
         </h1>
-        <div class="flex justify-center items-center gap-3 mb-4">
+        <div class="flex justify-center items-center gap-3">
           <div>{{ personalDetails.position }}</div>
           <div class="flex items-center justify-center gap-1">
             <i class="material-icons text-sm" aria-hidden="true">location_on</i>

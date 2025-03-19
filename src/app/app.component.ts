@@ -7,7 +7,7 @@ import { AsyncHandlerModule } from './shared/asyncHandler.module';
   selector: 'app-root',
   imports: [MatTabsModule, RouterModule, AsyncHandlerModule],
   template: `
-    <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="no-print mb-6">
       @for (link of links; track link) {
         <a mat-tab-link
           [routerLink]="link.path"
@@ -17,7 +17,7 @@ import { AsyncHandlerModule } from './shared/asyncHandler.module';
         </a>
       }
     </nav>
-    <mat-tab-nav-panel #tabPanel />
+    <mat-tab-nav-panel class="no-print" #tabPanel />
     <router-outlet />
   `,
   styles: [],

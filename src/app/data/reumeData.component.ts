@@ -9,10 +9,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [CommonModule, MatProgressSpinnerModule],
   template: `
     <mat-spinner *ngIf="isLoading" color="accent" />
-    {{resumeData | json}}
-  `
+    {{ resumeData | json }}
+  `,
 })
-
 export class ResumeDataComponent {
   resumeService = inject(ResumeDataService);
   resumeData: ResumeData | undefined;
@@ -21,7 +20,7 @@ export class ResumeDataComponent {
   @AsyncHandler({
     errorMessage: 'Failed to load resume data',
     successMessage: 'Resume data loaded successfully',
-    loadingProperty: 'isLoading'
+    loadingProperty: 'isLoading',
   })
   async ngOnInit() {
     this.resumeData = await this.resumeService.loadResume();
