@@ -4,7 +4,8 @@
 @tailwind utilities;
 
 :root {
-  --mdc-linear-progress-active-indicator-color: #000;
+  --theme-primary-text: #040404;
+  --theme-secondary-text: #54575c;
 }
 
 html,
@@ -15,12 +16,22 @@ body {
   box-sizing: border-box;
   font-size: 13px;
   letter-spacing: 1.5;
+  color: var(--theme-primary-text);
 }
 
 @media print {
   .no-print {
     display: none !important;
   }
+}
+
+@page {
+  margin: 0;
+  size: auto;
+}
+
+.text-primary {
+  color: var(--theme-primary-text);
 }
 
 resume-preview {

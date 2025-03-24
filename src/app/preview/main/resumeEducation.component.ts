@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { DateRangeComponent } from '../../shared/dateRange.component';
+import { DateRangeComponent } from '../../shared/components/dateRange.component';
 
 @Component({
   selector: 'resume-education',

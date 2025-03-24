@@ -21,7 +21,7 @@ export class AsyncHandlerService {
     this.#snackBar.open(message, 'Close', {
       duration: 3000,
       horizontalPosition: 'right',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       panelClass: type
     });
   }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DateRangeComponent } from '../../../shared/dateRange.component';
+import { DateRangeComponent } from '../../../shared/components/dateRange.component';
 
 @Component({
 	selector: 'resume-employment-header',
@@ -12,6 +12,6 @@ import { DateRangeComponent } from '../../../shared/dateRange.component';
 	`
 })
 export class ResumeEmploymentHistoryHeaderComponent {
-  @Input({ required: true }) history: EmploymentDataEntry | undefined;
+	@Input({ required: true }) history: EmploymentDataEntry | undefined;
 
 }

@@ -4,6 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'orderBy',
 })
 export class OrderByPipe implements PipeTransform {
+
   transform(array: any[], field: string, order: 'asc' | 'desc' = 'asc'): any[] {
     const props = field.split(',');
     return [...(array || [])].sort((a, b) =>

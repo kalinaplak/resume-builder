@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { ResumeDataService } from '../data/resumeData.service';
-import { AsyncHandler } from '../shared/asyncHandler.decorator';
+import { ResumeDataService } from '../edit/resumeData.service';
+import { AsyncHandler } from '../shared/asyncHandler/asyncHandler.decorator';
 import { ResumeDetailsComponent } from './details/resumeDetails.component';
 import { ResumeMainComponent } from './main/resumeMain.component';
 import { ResumeHeaderComponent } from './resumeHeader.component';
@@ -10,26 +9,21 @@ import { ResumeHeaderComponent } from './resumeHeader.component';
 @Component({
   selector: 'resume-preview',
   imports: [
-    CommonModule,
     ResumeHeaderComponent,
     ResumeMainComponent,
     ResumeDetailsComponent,
-    MatButtonModule
   ],
   template: `
-    <div class="flex flex-col items-center gap-y-3">
-      <button class="no-print" mat-button (click)="generatePDF()">Download PDF</button>
-      <div class="a4-preview relative overflow-hidden bg-white shadow-xl border border-gray-200">
-        @if(resumeData){
-          <div class="flex flex-col gap-y-6">
-            <resume-header [personalDetails]="resumeData.personalDetails" />
-            <div class="grid grid-cols-[1fr_6fr] gap-x-8">
-              <resume-details [resumeData]="resumeData" />
-              <resume-main [resumeData]="resumeData" />
-            </div>
+    <div class="a4-preview shadow-xl border border-gray-200 bg-white relative overflow-hidden">
+      @if(resumeData){
+        <div class="flex flex-col gap-y-6">
+          <resume-header [personalDetails]="resumeData.personalDetails" />
+          <div class="grid grid-cols-[1fr_6fr] gap-x-8">
+            <resume-details [resumeData]="resumeData" />
+            <resume-main [resumeData]="resumeData" />
           </div>
-        }
-      </div>
+        </div>
+      }
     </div>
   `,
   host: { class: 'flex items-center justify-center' },
@@ -39,6 +33,12 @@ import { ResumeHeaderComponent } from './resumeHeader.component';
         width: 210mm;
         height: 296mm;
         padding: 10mm 15mm;
+      }
+      @media print {
+        .a4-preview {
+          box-shadow: none;
+          border: none;
+        }
       }
     `,
   ],
@@ -55,9 +55,5 @@ export class ResumePreviewComponent {
   })
   async ngOnInit() {
     this.resumeData = await this.resumeService.loadResume();
-  }
-
-  generatePDF() {
-    window.print();
   }
 }
