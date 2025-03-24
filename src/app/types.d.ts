@@ -1,3 +1,9 @@
+
+interface Timestamp {
+  seconds: number;
+  nanoseconds: number;
+}
+
 interface ResumeData {
   personalDetails: PersonalDetailsData;
   employment: EmploymentDataEntry[];
@@ -9,24 +15,24 @@ interface ResumeData {
 }
 
 interface PersonalDetailsData {
-  position: string;
   name: string;
   surname: string;
   email: string;
   phone: string;
   city: string;
   country: string;
+  position: string;
   summary: string;
 }
 
 interface EmploymentDataEntry {
-  achievements: string[];
-  projects: string[];
-  startDate: string;
-  endDate?: string;
-  city: string;
-  employer: string;
   position: string;
+  employer: string;
+  city: string;
+  startDate: firebase.firestore.Timestamp;
+  endDate?: firebase.firestore.Timestamp;
+  projects: string[];
+  achievements: string[];
 }
 
 interface EducationDataEntry {

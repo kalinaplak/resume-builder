@@ -1,7 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { ResumeDataService } from '../edit/resumeData.service';
-import { AsyncHandler } from '../shared/asyncHandler/asyncHandler.decorator';
+import { Component, Input } from '@angular/core';
 import { ResumeDetailsComponent } from './details/resumeDetails.component';
 import { ResumeMainComponent } from './main/resumeMain.component';
 import { ResumeHeaderComponent } from './resumeHeader.component';
@@ -44,16 +41,5 @@ import { ResumeHeaderComponent } from './resumeHeader.component';
   ],
 })
 export class ResumePreviewComponent {
-  resumeService = inject(ResumeDataService);
-  resumeData: ResumeData | undefined;
-  isLoading = false;
-
-  @AsyncHandler({
-    errorMessage: 'Failed to load resume data',
-    successMessage: 'Resume data loaded successfully',
-    loadingProperty: 'isLoading',
-  })
-  async ngOnInit() {
-    this.resumeData = await this.resumeService.loadResume();
-  }
+  @Input({ required: true }) resumeData!: ResumeData;
 }

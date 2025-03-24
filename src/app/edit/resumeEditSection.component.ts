@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
       <mat-expansion-panel-header>
         <mat-panel-title class="flex gap-x-2"> 
           <mat-icon class="text-lg">{{icon}}</mat-icon>
-          <span>{{sectionTitle}}</span>
+          <h2 class="text-xl">{{sectionTitle}}</h2>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-content />

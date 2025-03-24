@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AsyncHandler } from '../shared/asyncHandler/asyncHandler.decorator';
-import { ResumeDataService } from './resumeData.service';
+import { ProfileDataFormComponent } from './profileDataForm.component';
 import { ResumeEditSectionComponent } from './resumeEditSection.component';
+import { EmploymentEditFormComponent } from './employmentEditForm.component';
 
 @Component({
   selector: 'resume-edit',
@@ -19,34 +19,19 @@ import { ResumeEditSectionComponent } from './resumeEditSection.component';
     MatInputModule,
     MatButtonModule,
     MatDatepickerModule,
-    ResumeEditSectionComponent
+    ResumeEditSectionComponent,
+    ProfileDataFormComponent,
+    EmploymentEditFormComponent
   ],
   providers: [provideNativeDateAdapter()],
   template: `
-    @if(isLoading) {
-      <mat-spinner color="accent" />
-    } @else {
-      <div class="flex flex-col w-full gap-y-4">
+    @if(resumeData){
+      <div class="flex flex-col w-full gap-y-6">
         <resume-edit-section [currentStep]="step()" [sectionStep]="0" sectionTitle="Personal details" icon="account_circle" (onStepChanged)="setStep($event)">  
-          <div class="flex gap-x-5 w-full">
-            <mat-form-field class="w-full">
-              <mat-label>First name</mat-label>
-              <input matInput />
-            </mat-form-field>
-            <mat-form-field class="w-full">
-              <mat-label>Age</mat-label>
-              <input matInput type="number" min="1" />
-            </mat-form-field>
-          </div>
+          <profile-data-form [personalDetails]="resumeData.personalDetails" />
         </resume-edit-section>
-
         <resume-edit-section [currentStep]="step()" [sectionStep]="1" sectionTitle="Employment history" icon="work" (onStepChanged)="setStep($event)">
-          <div class="flex gap-x-5 w-full">
-            <mat-form-field class="w-full">
-              <mat-label>Country</mat-label>
-              <input matInput />
-            </mat-form-field>
-          </div>
+          <employment-edit-form [employmentEntries]="resumeData.employment" />
         </resume-edit-section>
 
         <resume-edit-section [currentStep]="step()" [sectionStep]="2" sectionTitle="Education history" icon="school" (onStepChanged)="setStep($event)">
@@ -99,19 +84,8 @@ import { ResumeEditSectionComponent } from './resumeEditSection.component';
   `,
 })
 export class ResumeDataComponent {
-  resumeService = inject(ResumeDataService);
-  resumeData: ResumeData | undefined;
-  isLoading = false;
+  @Input({ required: true }) resumeData!: ResumeData;
   step = signal(0);
-
-  @AsyncHandler({
-    errorMessage: 'Failed to load resume data',
-    successMessage: 'Resume data loaded successfully',
-    loadingProperty: 'isLoading',
-  })
-  async ngOnInit() {
-    this.resumeData = await this.resumeService.loadResume();
-  }
 
   setStep(index: number) {
     this.step.set(index);
