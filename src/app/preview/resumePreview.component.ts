@@ -8,7 +8,7 @@ import { ResumeHeaderComponent } from './resumeHeader.component';
   imports: [
     ResumeHeaderComponent,
     ResumeMainComponent,
-    ResumeDetailsComponent,
+    ResumeDetailsComponent
   ],
   template: `
     <div class="a4-preview shadow-xl border border-gray-200 bg-white relative overflow-hidden">

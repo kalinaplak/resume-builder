@@ -6,9 +6,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ProfileDataFormComponent } from './profileDataForm.component';
+import { dataForms } from './forms/formImports';
 import { ResumeEditSectionComponent } from './resumeEditSection.component';
-import { EmploymentEditFormComponent } from './employmentEditForm.component';
 
 @Component({
   selector: 'resume-edit',
@@ -20,64 +19,32 @@ import { EmploymentEditFormComponent } from './employmentEditForm.component';
     MatButtonModule,
     MatDatepickerModule,
     ResumeEditSectionComponent,
-    ProfileDataFormComponent,
-    EmploymentEditFormComponent
+    ...dataForms
   ],
   providers: [provideNativeDateAdapter()],
   template: `
     @if(resumeData){
       <div class="flex flex-col w-full gap-y-6">
-        <resume-edit-section [currentStep]="step()" [sectionStep]="0" sectionTitle="Personal details" icon="account_circle" (onStepChanged)="setStep($event)">  
+        <resume-edit-section [currentStep]="step()" [sectionStep]="0" sectionTitle="Personal details" icon="account_circle" (stepChanged)="setStep($event)">  
           <profile-data-form [personalDetails]="resumeData.personalDetails" />
         </resume-edit-section>
-        <resume-edit-section [currentStep]="step()" [sectionStep]="1" sectionTitle="Employment history" icon="work" (onStepChanged)="setStep($event)">
-          <employment-edit-form [employmentEntries]="resumeData.employment" />
+        <resume-edit-section [currentStep]="step()" [sectionStep]="1" sectionTitle="Employment history" icon="work" (stepChanged)="setStep($event)">
+          <employment-data-form [employmentEntries]="resumeData.employment" />
         </resume-edit-section>
-
-        <resume-edit-section [currentStep]="step()" [sectionStep]="2" sectionTitle="Education history" icon="school" (onStepChanged)="setStep($event)">
-          <div class="flex gap-x-5 w-full">
-            <mat-form-field class="w-full">
-              <mat-label>Date</mat-label>
-              <input matInput [matDatepicker]="picker" (focus)="picker.open()" readonly />
-            </mat-form-field>
-            <mat-datepicker #picker></mat-datepicker>
-          </div>
+        <resume-edit-section [currentStep]="step()" [sectionStep]="2" sectionTitle="Education history" icon="school" (stepChanged)="setStep($event)">
+          <education-data-form [educationEntries]="resumeData.education" />
         </resume-edit-section>
-
-        <resume-edit-section [currentStep]="step()" [sectionStep]="3" sectionTitle="Skills" icon="star_half" (onStepChanged)="setStep($event)">
-          <div class="flex gap-x-5 w-full">
-            <mat-form-field class="w-full">
-              <mat-label>Country</mat-label>
-              <input matInput />
-            </mat-form-field>
-          </div>
+        <resume-edit-section [currentStep]="step()" [sectionStep]="3" sectionTitle="Skills" icon="star_half" (stepChanged)="setStep($event)">
+          <skills-data-form [skillsEntries]="resumeData.skills" />
         </resume-edit-section>
-
-        <resume-edit-section [currentStep]="step()" [sectionStep]="4" sectionTitle="Websites" icon="language" (onStepChanged)="setStep($event)">
-          <div class="flex gap-x-5 w-full">
-            <mat-form-field class="w-full">
-              <mat-label>Country</mat-label>
-              <input matInput />
-            </mat-form-field>
-          </div>
+        <resume-edit-section [currentStep]="step()" [sectionStep]="4" sectionTitle="Websites" icon="language" (stepChanged)="setStep($event)">
+          <websites-data-form [websites]="resumeData.websites" />
         </resume-edit-section>
-
-        <resume-edit-section [currentStep]="step()" [sectionStep]="5" sectionTitle="Languages" icon="translate" (onStepChanged)="setStep($event)">
-          <div class="flex gap-x-5 w-full">
-            <mat-form-field class="w-full">
-              <mat-label>Country</mat-label>
-              <input matInput />
-            </mat-form-field>
-          </div>
+        <resume-edit-section [currentStep]="step()" [sectionStep]="5" sectionTitle="Languages" icon="translate" (stepChanged)="setStep($event)">
+          <languages-data-form [languagesEntries]="resumeData.languages" />
         </resume-edit-section>
-
-        <resume-edit-section [currentStep]="step()" [sectionStep]="6" sectionTitle="Hobbies" icon="sports_esports" (onStepChanged)="setStep($event)">
-          <div class="flex gap-x-5 w-full">
-            <mat-form-field class="w-full">
-              <mat-label>Country</mat-label>
-              <input matInput />
-            </mat-form-field>
-          </div>  
+        <resume-edit-section [currentStep]="step()" [sectionStep]="6" sectionTitle="Hobbies" icon="sports_esports" (stepChanged)="setStep($event)">
+          <hobbies-data-form [hobbies]="resumeData.hobbies" />
         </resume-edit-section>
       </div>
     }

@@ -38,5 +38,5 @@ import { ResumeDetailsPersonalDataComponent } from './resumeDetailsPersonalData.
   `,
 })
 export class ResumeDetailsComponent {
-  @Input({ required: true }) resumeData: ResumeData | undefined;
+  @Input({ required: true }) resumeData!: ResumeData;
 }

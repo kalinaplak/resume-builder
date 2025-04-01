@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ResumePreviewComponent } from './preview/resumePreview.component';
 import { ResumeDataComponent } from './edit/reumeEdit.component';
 import { MatButtonModule } from '@angular/material/button';
 import { AsyncHandler } from './shared/asyncHandler/asyncHandler.decorator';
-import { ResumeDataService } from './edit/resumeData.service';
+import { ResumeDataService } from './resumeData.service';
 
 @Component({
   selector: 'resume-details',
@@ -16,14 +16,14 @@ import { ResumeDataService } from './edit/resumeData.service';
       <div class="grid grid-cols-[1fr_220mm] gap-x-4">
         @if(resumeData){
           <resume-edit class="no-print pl-6 flex" [resumeData]="resumeData"/>
-          <resume-preview class="self-start"[resumeData]="resumeData"/>
+          <resume-preview class="self-start sticky top-0" [resumeData]="resumeData"/>
         }
       </div>
     </div>
   `
 })
 
-export class ResumeDetailsComponent {
+export class ResumeDetailsComponent implements OnInit {
   resumeService = inject(ResumeDataService);
   resumeData: ResumeData | undefined;
   isLoading = false;

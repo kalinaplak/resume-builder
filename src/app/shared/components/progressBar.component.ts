@@ -11,8 +11,8 @@ import { Component, Input } from '@angular/core';
 })
 
 export class ProgressBarComponent {
-  @Input({ required: true }) progress: number = 0;
-  @Input() color: string = 'black';
-  @Input() bgColor: string = 'lightgray';
-  @Input() height: string = '3px';
+  @Input({ required: true }) progress = 0;
+  @Input() color = 'black';
+  @Input() bgColor = 'lightgray';
+  @Input() height = '3px';
 }

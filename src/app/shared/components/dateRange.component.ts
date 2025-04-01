@@ -21,5 +21,5 @@ import { FormatDatePipe } from '../pipes/formatDate.pipe';
 export class DateRangeComponent {
   @Input({ required: true }) startDate: string | Date | Timestamp = new Date();
   @Input() endDate: string | Date | Timestamp | undefined;
-  @Input() format: string = 'MMMM YYYY'
+  @Input() format = 'MMMM YYYY'
 }

@@ -38,8 +38,8 @@ interface EmploymentDataEntry {
 interface EducationDataEntry {
   degree: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  startDate: firebase.firestore.Timestamp;
+  endDate: firebase.firestore.Timestamp;
   school: string;
 }
 

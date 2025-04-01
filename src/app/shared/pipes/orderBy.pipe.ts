@@ -2,17 +2,18 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'orderBy',
+  pure: false //todo!
 })
 export class OrderByPipe implements PipeTransform {
 
-  transform(array: any[], field: string, order: 'asc' | 'desc' = 'asc'): any[] {
+  transform<T>(array: T[], field: string, order: 'asc' | 'desc' = 'asc'): T[] {
     const props = field.split(',');
     return [...(array || [])].sort((a, b) =>
-      this.sortFn(a, b, props, order === 'asc')
-    ) as any;
+      this.sortFn(a, b, props as (keyof T)[], order === 'asc')
+    ) as T[];
   }
 
-  private sortFn(a: any, b: any, props: string[], asc: boolean) {
+  private sortFn<T>(a: T, b: T, props: (keyof T)[], asc: boolean) {
     if (!props.length) {
       return 0;
     }
@@ -29,7 +30,10 @@ export class OrderByPipe implements PipeTransform {
     return 0;
   }
 
-  private normalize(value: string) {
-    return value.toString().toLowerCase();
+  private normalize<T>(value: T) {
+    if(typeof value === 'string'){
+      return value.toLowerCase();
+    }
+    return value;
   }
 }

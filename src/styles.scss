@@ -4,56 +4,61 @@
 @tailwind utilities;
 
 :root {
-  --theme-primary-text: #040404;
-  --theme-secondary-text: #54575c;
+	--theme-primary-text: #040404;
+	--theme-secondary-text: #54575c;
 }
 
 html,
 body {
-  height: 100%;
-  margin: 0;
-  font-family: "Roboto", sans-serif !important;
-  box-sizing: border-box;
-  font-size: 14px;
-  letter-spacing: 1.5;
-  color: var(--theme-primary-text);
+	height: 100%;
+	margin: 0;
+	font-family: "Roboto", sans-serif !important;
+	box-sizing: border-box;
+	font-size: 14px;
+	letter-spacing: 1.5;
+	color: var(--theme-primary-text);
 }
 
 @media print {
-  .no-print {
-    display: none !important;
-  }
+	.no-print {
+		display: none !important;
+	}
 }
 
 @page {
-  margin: 0;
-  size: auto;
+	margin: 0;
+	size: auto;
 }
 
 .text-primary {
-  color: var(--theme-primary-text);
+	color: var(--theme-primary-text);
+}
+
+mat-icon.flex {
+	display: flex;
 }
 
 resume-preview {
-  font-family: "Asap Condensed", sans-serif !important;
-  font-size: 13px;
-  h1 {
-    font-size: 2em;
-    margin: 0px;
-    text-transform: uppercase;
-    font-weight: normal;
-    letter-spacing: 0.15em;
-  }
+	font-family: "Asap Condensed", sans-serif !important;
+	font-size: 13px;
 
-  h2 {
-    font-size: 1.1666666666666667em;
-    text-transform: uppercase;
-    font-weight: normal;
-    letter-spacing: 0.15em;
-  }
+	h1 {
+		font-size: 2em;
+		margin: 0px;
+		text-transform: uppercase;
+		font-weight: normal;
+		letter-spacing: 0.15em;
+	}
 
-  h3 {
-    font-size: 1em;
-    font-weight: 600;
-  }
+	h2 {
+		font-size: 1.1666666666666667em;
+		text-transform: uppercase;
+		font-weight: normal;
+		letter-spacing: 0.15em;
+	}
+
+	h3 {
+		font-size: 1em;
+		font-weight: 600;
+	}
 }

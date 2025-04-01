@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
   ],
   template: `
-    <mat-expansion-panel [expanded]="currentStep === sectionStep" (opened)="onStepChanged.emit(sectionStep)">
+    <mat-expansion-panel [expanded]="currentStep === sectionStep" (opened)="stepChanged.emit(sectionStep)">
       <mat-expansion-panel-header>
         <mat-panel-title class="flex gap-x-2"> 
           <mat-icon class="text-lg">{{icon}}</mat-icon>
@@ -27,5 +27,5 @@ export class ResumeEditSectionComponent {
   @Input({ required: true }) sectionStep!: number;
   @Input({ required: true }) sectionTitle!: string;
   @Input({ required: true }) icon!: string;
-  @Output() onStepChanged = new EventEmitter();
+  @Output() stepChanged = new EventEmitter();
 }

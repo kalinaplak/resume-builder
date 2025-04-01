@@ -9,42 +9,54 @@ export interface AsyncHandlerConfig {
 }
 
 export function AsyncHandler(config: AsyncHandlerConfig) {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function <T, R>(
+    target: T,
+    propertyKey: string,
+    descriptor: TypedPropertyDescriptor<(...args: unknown[]) => Promise<R | undefined>>
+  ): TypedPropertyDescriptor<(...args: unknown[]) => Promise<R | undefined>> {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    if (!originalMethod) {
+      throw new Error(`Method ${propertyKey} is undefined.`);
+    }
+
+    descriptor.value = async function (this: T, ...args: unknown[]) {
       const asyncHandlerService = AsyncHandlerModule.injector.get<AsyncHandlerService>(AsyncHandlerService);
 
       const setLoadingProp = (value: boolean) => {
-        if (config.loadingProperty) {
-          (this as any)[config.loadingProperty] = value;
+        if (config.loadingProperty && this && typeof this === "object") {
+          (this as Record<string, unknown>)[config.loadingProperty] = value;
         }
       };
+
       const handleError = (error: Error) => {
         if (config.errorMessage && !config.errorProperty) {
           asyncHandlerService.handleError(error, config.errorMessage);
         }
-        if (config.errorProperty) {
-          (this as any)[config.errorProperty] = config.errorMessage;
+        if (config.errorProperty && this && typeof this === "object") {
+          (this as Record<string, unknown>)[config.errorProperty] = config.errorMessage;
         }
       };
+
       const handleSuccess = () => {
         if (config.successMessage) {
           asyncHandlerService.handleSuccess(config.successMessage);
         }
       };
-      //async handling
+
+      // Async handling
       setLoadingProp(true);
       try {
         const result = await originalMethod.apply(this, args);
         handleSuccess();
         return result;
-      } catch (error: any) {
+      } catch (error) {
         console.error(error);
-        handleError(error);
+        handleError(error as Error);
       } finally {
         setLoadingProp(false);
       }
+      return;
     };
 
     return descriptor;

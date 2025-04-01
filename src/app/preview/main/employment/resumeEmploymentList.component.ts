@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
 	selector: 'resume-employment-list',
 	template: `
 		@if(sectionTitle && entries?.length){ 
-			<label class="underline">{{sectionTitle}}</label> 
+			<div class="underline">{{sectionTitle}}</div> 
 		}
 		<ul class="ml-8">
 			@for(entry of entries; track entry){
