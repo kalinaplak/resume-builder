@@ -23,7 +23,6 @@ import { ResumeHeaderComponent } from './resumeHeader.component';
       }
     </div>
   `,
-  host: { class: 'flex items-center justify-center' },
   styles: [
     `
       .a4-preview {

@@ -1,7 +1,8 @@
-
-interface Timestamp {
-  seconds: number;
-  nanoseconds: number;
+interface ResumeListItem {
+  id: string;
+  title: string;
+  lastModificationDate: firebase.firestore.Timestamp;
+  creationDate: firebase.firestore.Timestamp;
 }
 
 interface ResumeData {

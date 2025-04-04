@@ -2,14 +2,23 @@ import { inject, Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { collection, getDocs } from 'firebase/firestore';
 
-
-
 @Injectable({ providedIn: 'root' })
 export class ResumeDataService {
   firestore = inject(Firestore);
 
-  async loadResume() {
-    const resumeCollection = collection(this.firestore, 'resume');
+  async loadResumes() {
+    const resumesCollection = collection(this.firestore, 'resumes');
+    const snapshot = await getDocs(resumesCollection);
+    const resumes: any[] = [];
+    snapshot.forEach(doc => {
+      const data = { id: doc.id, ...doc.data() };
+      resumes.push(data);
+    });
+    return resumes;
+  }
+
+  async loadResume(id: string) {
+    const resumeCollection = collection(this.firestore, `/resumes/${id}/resume`);
     const snapshot = await getDocs(resumeCollection);
     const result: any = this.getEmptyResume();
 
@@ -32,23 +41,22 @@ export class ResumeDataService {
 
   private getEmptyResume(): ResumeData {
     return {
-      education:[],
+      education: [],
       employment: [],
-      hobbies: {description:''},
-      languages:[],
+      hobbies: { description: '' },
+      languages: [],
       skills: [],
-      websites:{github:'', linkedin:''},
+      websites: { github: '', linkedin: '' },
       personalDetails: {
-        city:'',
-        country:'',
-        email:'',
-        name:'',
-        phone:'',
-        position:'',
-        summary:'',
-        surname:''
+        city: '',
+        country: '',
+        email: '',
+        name: '',
+        phone: '',
+        position: '',
+        summary: '',
+        surname: ''
       }
     }
   }
-
 }
