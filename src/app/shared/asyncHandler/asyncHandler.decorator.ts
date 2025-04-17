@@ -9,11 +9,11 @@ export interface AsyncHandlerConfig {
 }
 
 export function AsyncHandler(config: AsyncHandlerConfig) {
-  return function <T, R>(
+  return function <T, R, A>(
     target: T,
     propertyKey: string,
-    descriptor: TypedPropertyDescriptor<(...args: unknown[]) => Promise<R | undefined>>
-  ): TypedPropertyDescriptor<(...args: unknown[]) => Promise<R | undefined>> {
+    descriptor: TypedPropertyDescriptor<(...args: A[]) => Promise<R | undefined>>
+  ): TypedPropertyDescriptor<(...args: A[]) => Promise<R | undefined>> {
     const originalMethod = descriptor.value;
 
     if (!originalMethod) {
@@ -47,7 +47,7 @@ export function AsyncHandler(config: AsyncHandlerConfig) {
       // Async handling
       setLoadingProp(true);
       try {
-        const result = await originalMethod.apply(this, args);
+        const result = await originalMethod.apply(this, args as A[]);
         handleSuccess();
         return result;
       } catch (error) {

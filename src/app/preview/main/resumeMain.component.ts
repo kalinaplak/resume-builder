@@ -12,7 +12,7 @@ import { ResumeMainSectionComponent } from './resumeMainSection.component';
   ],
   template: `
     @if(resumeData){
-			<div class="flex flex-col gap-y-5">
+			<div class="flex flex-col gap-y-4">
 				<resume-main-section icon="person" sectionTitle="Profile">
 					<p>{{ resumeData.personalDetails.summary }}</p>
 				</resume-main-section>

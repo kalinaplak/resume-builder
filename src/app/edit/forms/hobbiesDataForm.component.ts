@@ -12,9 +12,9 @@ import { MatInputModule } from '@angular/material/input';
   ],
   template: `
     <form #profileForm="ngForm">
-      <mat-form-field>
+      <mat-form-field class="w-full">
         <mat-label>Description</mat-label>
-        <textarea matInput name="summary" [(ngModel)]="hobbies.description"></textarea>
+        <textarea  matInput name="summary" [(ngModel)]="hobbies.description"></textarea>
       </mat-form-field>
     </form>
   `

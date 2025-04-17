@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ResumeDataService } from '../resumeData.service';
 import { MatButtonModule } from "@angular/material/button";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,6 +14,7 @@ import { FormatDatePipe } from '../shared/pipes/formatDate.pipe';
     FormatDatePipe
   ],
   template: `
+    @let loading = resumeService.loading;
     <div class="flex flex-col gap-y-4">
       <div class="flex justify-between items-center">
         <h1 class="font-semibold text-2xl">Resume List</h1>
@@ -38,12 +39,11 @@ import { FormatDatePipe } from '../shared/pipes/formatDate.pipe';
   `
 })
 
-export class ResumeListComponent {
-  private resumeService = inject(ResumeDataService);
+export class ResumeListComponent implements OnInit {
+  resumeService = inject(ResumeDataService);
   private router = inject(Router);
 
   resumes: ResumeListItem[] = [];
-  loading = true;
 
   @AsyncHandler({ loadingProperty: 'loading' })
   async ngOnInit() {
@@ -54,12 +54,14 @@ export class ResumeListComponent {
     this.router.navigate(['resume-builder', 'resume', id]);
   }
 
-  deleteResume(id: string) {
-    // Implement delete functionality
+  async deleteResume(id: string) {
+    await this.resumeService.deleteResume(id);
+    this.resumes = this.resumes.filter(resume => resume.id !== id);
   }
 
-  addResume() {
-    // Implement add functionality
+  async addResume() {
+    const id = await this.resumeService.createResume()
+    this.router.navigate(['resume-builder', 'resume', id]);
   }
 
 }

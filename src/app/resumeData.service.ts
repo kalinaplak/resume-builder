@@ -1,10 +1,16 @@
-import { inject, Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
-import { collection, getDocs } from 'firebase/firestore';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { Firestore, setDoc, doc, getDocs, collection, getDoc, deleteDoc, addDoc } from '@angular/fire/firestore';
+import { AuthService } from './auth.service';
+import { AsyncHandler } from './shared/asyncHandler/asyncHandler.decorator';
 
 @Injectable({ providedIn: 'root' })
 export class ResumeDataService {
-  firestore = inject(Firestore);
+  private firestore = inject(Firestore);
+  private auth = inject(AuthService);
+
+  private _resumeData = signal<ResumeData | null>(null);
+  resumeData = computed(() => this._resumeData());
+  loading = false;
 
   async loadResumes() {
     const resumesCollection = collection(this.firestore, 'resumes');
@@ -25,18 +31,83 @@ export class ResumeDataService {
     for (const doc of snapshot.docs) {
       const data = doc.data();
       const key = doc.id as keyof ResumeData;
-      result[key] = data['collection-name']
-        ? await this.loadSubCollection(doc.id, data['collection-name'])
+      console.log(key, result);
+      result[key] = Array.isArray(result[key])
+        ? await this.loadSubCollection(id, doc.id, `${doc.id}List`)
         : data;
     }
-
+    this._resumeData.set(result);
     return result as ResumeData;
   }
 
-  private async loadSubCollection(docId: string, collectionName: string) {
-    const subCollection = collection(this.firestore, `/resume/${docId}/${collectionName}`);
-    const subSnapshot = await getDocs(subCollection);
-    return subSnapshot.docs.map(d => d.data());
+  @AsyncHandler({
+    errorMessage: 'Failed to create resume',
+    successMessage: 'Resume created successfully',
+    loadingProperty: 'loading',
+  })
+  async createResume(): Promise<string | undefined>{
+    const resumesCollection = collection(this.firestore, 'resumes');
+    const docRef = await addDoc(resumesCollection, {
+      title: this.auth.user ? `${this.auth.user()?.displayName}` : 'Unknown Author',
+      lastModificationDate: new Date(),
+      createdDate: new Date(),
+    });
+    return docRef.id;
+  }
+
+  async editResume(id: string, resume: ResumeData){
+    const keys = Object.keys(resume) as (keyof typeof resume)[];
+    const resumeRef = doc(this.firestore, 'resumes', id);
+    const resumeData = (await getDoc(resumeRef)).data();
+
+
+    await setDoc(resumeRef, {
+      title: `${resume.personalDetails.name} ${resume.personalDetails.surname}`,
+      lastModificationDate: new Date(),
+      createdDate: resumeData?.['createdDate'] || new Date(),
+    });
+
+    for(const key of keys){
+      if(resume[key]){
+        if(Array.isArray(resume[key])){
+          this.updateSubCollection(id, key, resume);
+        } else {
+          const subResumeRef = doc(this.firestore, 'resumes', id, 'resume', key);
+          await setDoc(subResumeRef, resume[key]);
+        }
+      }
+    }
+  }
+
+  @AsyncHandler({
+    errorMessage: 'Failed to delete resume',
+    successMessage: 'Resume deleted successfully',
+    loadingProperty: 'loading',
+  })
+  async deleteResume(id: string) {
+    const resumeRef = doc(this.firestore, 'resumes', id);
+    const resumeCollection = collection(this.firestore, 'resumes', id, 'resume');
+    const resumeSnapshot = await getDocs(resumeCollection);
+    await Promise.all(resumeSnapshot.docs.map(doc => deleteDoc(doc.ref)));
+    await deleteDoc(resumeRef);
+    return;
+  }
+
+  private async loadSubCollection(id: string, docId: string, collectionName: string) {
+    const subCollectionRef = collection(this.firestore,'resumes', id, 'resume', docId, collectionName);
+    const subCollectionSnapshot = await getDocs(subCollectionRef);
+    return subCollectionSnapshot.docs.map(doc => doc.data());
+  }
+
+  private async updateSubCollection(id: string, key: keyof typeof resume, resume: ResumeData) {
+    if(Array.isArray(resume[key])){
+      const listRef = collection(this.firestore, 'resumes', id, 'resume', key, `${key}List`);
+      const existing = await getDocs(listRef);
+      await Promise.all(existing.docs.map(docSnap => deleteDoc(docSnap.ref)));
+      await Promise.all( resume[key].map(el => setDoc(doc(listRef), el)));
+      const parentDocRef = doc(this.firestore, 'resumes', id, 'resume', key);
+      await setDoc(parentDocRef, { lastModificationDate: new Date() }, { merge: true });
+    }
   }
 
   private getEmptyResume(): ResumeData {

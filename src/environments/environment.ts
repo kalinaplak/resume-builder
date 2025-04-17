@@ -1,11 +1,11 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: import.meta.env.FIREBASE_API_KEY,
-    authDomain: import.meta.env.FIREBASE_AUTH_DOMAIN,
+    apiKey: 'AIzaSyBBqNeFOP-mrofIhnMNZJWL7wBPSCysbHc',
+    authDomain: 'resume-builder-2af35.firebaseapp.com',
     projectId: "resume-builder-2af35",
-    storageBucket: import.meta.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.FIREBASE_APP_ID
+    storageBucket: 'resume-builder-2af35.firebasestorage.app',
+    messagingSenderId: '601395672655',
+    appId: '1:601395672655:web:096f631c2ba7f90dcb1c3a'
   }
 };
